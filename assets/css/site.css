@@ -1,0 +1,1462 @@
+/* ==========================================================================
+   Sikorska Notary — design system
+   Rebuild v1. Palette and typefaces carried over from the existing brand,
+   refined for contrast and for a corporate audience.
+   ========================================================================== */
+
+/* ---------- Fonts ---------- */
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('../fonts/PlayfairDisplay.woff2') format('woff2');
+  font-weight: 400 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Roboto Light';
+  src: url('../fonts/Roboto-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+
+/* ---------- Tokens ----------
+   v2. The three existing brand colours are unchanged. Each has been extended
+   into a family, and two new hues added:
+     petrol  — a cool counterweight so the site is not wall-to-wall brown
+     wax     — the red of a sealing wax impression. The notary's own colour,
+               and one no competing category owns. Used sparingly.
+   Nothing here changes the logo or the brand marks. */
+:root {
+  /* Brass, the existing primary */
+  --brass-900:    #33260f;
+  --brass-800:    #4a3a1f;
+  --brass:        #69502b;  /* unchanged, 7.4:1 on white */
+  --brass-600:    #8a6c3c;
+  --brass-300:    #cbb08a;
+  --brass-100:    #efe6d6;
+  --brass-50:     #f7f2e9;
+  --brass-deep:   #4a3a1f;  /* alias, v1 compatibility */
+  --brass-tint:   #f4efe6;  /* alias, v1 compatibility */
+
+  /* Gold, the accent */
+  --gold:         #ecc96e;  /* unchanged. Accent only, never body text */
+  --gold-deep:    #c9a227;
+  --gold-200:     #f6e3ae;
+  --gold-50:      #fdf7e8;
+  /* The darkest tone that still reads as gold and can be SET IN TYPE on white.
+     For reference on white: --gold is 1.60:1 and --gold-deep is 2.42:1, so both
+     fail even the relaxed 3:1 large-text threshold. This is 4.02:1. */
+  --gold-ink:     #9a7b1a;
+
+  /* Forest, the authority surface */
+  --forest-950:   #001a0b;
+  --forest:       #002b12;  /* unchanged */
+  --forest-800:   #073d1d;
+  --forest-700:   #10522a;
+  --sage-200:     #d7e3d6;
+  --sage-100:     #e8efe6;
+  --sage-50:      #f2f7f1;
+  --forest-soft:  #0d3d21;  /* alias, v1 compatibility */
+
+  /* Petrol, new secondary */
+  --petrol-900:   #06302f;
+  --petrol-800:   #0d4a4d;
+  --petrol:       #14615f;
+  --petrol-600:   #1d7b76;
+  --petrol-100:   #e0eeed;
+  --petrol-50:    #f0f7f6;
+
+  /* Wax, new accent. The seal colour */
+  --wax-900:      #5c1c24;
+  --wax:          #8c2f39;
+  --wax-600:      #a8404a;
+  --wax-100:      #f6e6e6;
+  --wax-50:       #fcf4f3;
+
+  /* Neutrals */
+  --ink:          #1c1a16;
+  --ink-soft:     #4a463e;
+  --ink-mute:     #6f6a60;
+  --line:         #e2ddd3;
+  --line-soft:    #efeae1;
+  --paper:        #ffffff;
+  --paper-warm:   #faf8f4;
+  --paper-deep:   #f4f1ea;
+
+  /* Signal */
+  --error:        #b3261e;
+  --error-bg:     #fdecea;
+  --ok:           #1e6b3a;
+
+  /* Per-service accent. Set --accent on a section or card and the
+     rules, icons and rays below pick it up automatically. */
+  --accent:       var(--brass);
+  --accent-soft:  var(--brass-100);
+
+  /* Motion */
+  --ease-out:     cubic-bezier(.16, .84, .44, 1);
+  --ease-in-out:  cubic-bezier(.65, 0, .35, 1);
+  --dur-fast:     160ms;
+  --dur:          260ms;
+  --dur-slow:     420ms;
+
+  /* Guilloche, the engraved line pattern used on security paper and share
+     certificates. Referenced as a background image on tinted surfaces. */
+  --engrave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%2369502b' stroke-width='.5' opacity='.16'%3E%3Ccircle cx='60' cy='60' r='54'/%3E%3Ccircle cx='60' cy='60' r='44'/%3E%3Ccircle cx='60' cy='60' r='34'/%3E%3Ccircle cx='60' cy='60' r='24'/%3E%3Ccircle cx='0' cy='0' r='54'/%3E%3Ccircle cx='120' cy='0' r='54'/%3E%3Ccircle cx='0' cy='120' r='54'/%3E%3Ccircle cx='120' cy='120' r='54'/%3E%3C/g%3E%3C/svg%3E");
+
+  /* Type */
+  --serif: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --sans:  'Roboto Light', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  /* One step below body, for copy inside cards, steps, timelines and lists.
+     Reading copy previously drifted between .9375rem and .9688rem depending on
+     the component, which showed up as several slightly different text sizes on
+     the same page. There are now three sizes of reading copy and no more:
+     the lede, the 1.0625rem body, and this. */
+  --fs-compact: 1rem;
+
+  /* Space */
+  --sp-1: .25rem; --sp-2: .5rem;  --sp-3: .75rem; --sp-4: 1rem;
+  --sp-5: 1.5rem; --sp-6: 2rem;   --sp-7: 3rem;   --sp-8: 4rem;
+  --sp-9: 6rem;
+
+  /* Layout */
+  --wrap: 1180px;
+  --wrap-narrow: 760px;
+  --radius: 4px;
+  --radius-lg: 8px;
+
+  --shadow-sm: 0 1px 2px rgba(28,26,22,.06), 0 2px 8px rgba(28,26,22,.04);
+  --shadow-md: 0 2px 6px rgba(28,26,22,.08), 0 12px 28px rgba(28,26,22,.08);
+
+  --header-h: 76px;
+  --bar-h: 40px;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 1.0625rem;      /* 17px — Roboto Light needs the size */
+  line-height: 1.7;
+  color: var(--ink-soft);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  overflow-wrap: break-word;
+}
+img, picture, svg, video { max-width: 100%; height: auto; display: block; }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+h1, h2, h3, h4 {
+  font-family: var(--serif);
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 var(--sp-4);
+  letter-spacing: -.01em;
+}
+h1 { font-size: clamp(2rem, 1.4rem + 2.6vw, 3.2rem); }
+h2 { font-size: clamp(1.55rem, 1.2rem + 1.5vw, 2.25rem); }
+h3 { font-size: clamp(1.2rem, 1.05rem + .6vw, 1.45rem); }
+h4 { font-size: 1.0625rem; font-family: var(--sans); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--brass); }
+p  { margin: 0 0 var(--sp-4); }
+a  { color: var(--brass); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--brass-deep); }
+
+:focus-visible {
+  outline: 3px solid var(--gold-deep);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------- Utility ---------- */
+.wrap { width: min(100% - 2.5rem, var(--wrap)); margin-inline: auto; }
+.wrap-narrow { width: min(100% - 2.5rem, var(--wrap-narrow)); margin-inline: auto; }
+.section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+.section--warm { background: var(--paper-warm); }
+.section--deep { background: var(--paper-deep); }
+.section--dark { background: var(--forest); color: #ded9cf; }
+.section--dark h2, .section--dark h3 { color: #fff; }
+.section--dark h4 { color: var(--gold); }
+.section--dark a { color: var(--gold); }
+
+/* ---------- Section colour rhythm (v2) ----------
+   The v1 site alternated white, off-white and one dark green. These give the
+   page a wider range to move through without leaving the brand. */
+.section--sage   { background: var(--sage-50); }
+.section--petrol { background: var(--petrol-50); }
+.section--gold   { background: var(--gold-50); }
+
+/* Deep surfaces */
+.section--forest {
+  background: linear-gradient(165deg, var(--forest-800) 0%, var(--forest) 55%, var(--forest-950) 100%);
+  color: #d9d4c9;
+}
+.section--ink {
+  background: linear-gradient(165deg, var(--petrol-900) 0%, var(--forest-950) 100%);
+  color: #d3d9d7;
+}
+.section--forest h2, .section--forest h3, .section--ink h2, .section--ink h3 { color: #fff; }
+.section--forest h4, .section--ink h4 { color: var(--gold); }
+.section--forest a, .section--ink a { color: var(--gold); }
+.section--forest .lede, .section--ink .lede { color: #cfcabf; }
+
+/* Engraved security-paper texture. Sits under content, never over it. */
+.section--engraved { position: relative; isolation: isolate; }
+.section--engraved::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background-image: var(--engrave);
+  background-size: 240px 240px;
+  opacity: .5;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(ellipse at 50% 0%, #000 0%, transparent 78%);
+  pointer-events: none;
+}
+.section--forest.section--engraved::before,
+.section--ink.section--engraved::before,
+.section--dark.section--engraved::before { opacity: .35; filter: invert(1) brightness(2.2); }
+
+/* A hairline rule with a seal notch, used between major sections */
+.rule {
+  border: 0; height: 1px; background: var(--line);
+  position: relative; margin: 0;
+}
+.rule::after {
+  content: ''; position: absolute; left: 50%; top: 50%;
+  width: 9px; height: 9px; transform: translate(-50%, -50%) rotate(45deg);
+  background: var(--paper); border: 1px solid var(--line);
+}
+
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: absolute; left: var(--sp-4); top: -100px; z-index: 200;
+  background: var(--forest); color: #fff; padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--radius); text-decoration: none; transition: top .15s;
+}
+.skip-link:focus { top: var(--sp-3); color: #fff; }
+
+.eyebrow {
+  font-size: .8125rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--brass); margin: 0 0 var(--sp-3); font-weight: 400;
+}
+.lede { font-size: clamp(1.0625rem, 1rem + .4vw, 1.25rem); line-height: 1.65; color: var(--ink-soft); }
+.text-center { text-align: center; }
+.mb-0 { margin-bottom: 0; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .55em;
+  padding: .85em 1.6em; min-height: 48px;
+  font-size: 1rem; font-family: var(--sans); letter-spacing: .01em;
+  border: 1.5px solid transparent; border-radius: var(--radius);
+  cursor: pointer; text-decoration: none; text-align: center;
+  transition: background-color .18s, color .18s, border-color .18s, transform .18s;
+}
+.btn:active { transform: translateY(1px); }
+.btn--primary { background: var(--brass); color: #fff; border-color: var(--brass); }
+.btn--primary:hover { background: var(--brass-deep); border-color: var(--brass-deep); color: #fff; }
+.btn--ghost { background: transparent; color: var(--brass); border-color: var(--brass); }
+.btn--ghost:hover { background: var(--brass); color: #fff; }
+.btn--gold { background: var(--gold); color: var(--forest); border-color: var(--gold); }
+.btn--gold:hover { background: #f2d68c; color: var(--forest); }
+.btn--onDark { background: transparent; color: #fff; border-color: rgba(255,255,255,.45); }
+.btn--onDark:hover { background: #fff; color: var(--forest); border-color: #fff; }
+.btn--block { width: 100%; }
+.btn--lg { font-size: 1.0625rem; padding: 1em 2em; }
+.btn svg { width: 1.1em; height: 1.1em; flex: none; fill: currentColor; }
+
+/* ==========================================================================
+   Call bar + header
+   ========================================================================== */
+.callbar {
+  background: var(--forest); color: #e6e1d7;
+  font-size: .875rem; letter-spacing: .01em;
+}
+.callbar__inner {
+  min-height: var(--bar-h);
+  display: flex; align-items: center; justify-content: center; gap: var(--sp-5);
+  flex-wrap: wrap; padding-block: .4rem; text-align: center;
+}
+.callbar__item { display: inline-flex; align-items: center; gap: .45em; }
+.callbar__item svg { width: 14px; height: 14px; fill: var(--gold); flex: none; }
+/* The number is the first thing a client reaches for on a phone, so it gets a
+   full 24px target rather than the 22px the line-height alone produced. */
+.callbar__item a { display: inline-flex; align-items: center; min-height: 24px; }
+.callbar a { color: #fff; text-decoration: none; font-weight: 400; }
+.callbar a:hover { color: var(--gold); text-decoration: underline; }
+.callbar__sep { color: rgba(255,255,255,.3); }
+
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(255,255,255,.97);
+  backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header__inner {
+  min-height: var(--header-h);
+  display: flex; align-items: center; gap: var(--sp-5);
+}
+.brand { display: flex; align-items: center; gap: .7rem; text-decoration: none; flex: none; }
+.brand img { width: 52px; height: 52px; }
+.brand__name {
+  font-family: var(--serif); font-size: 1.15rem; line-height: 1.15;
+  color: var(--ink); letter-spacing: .02em;
+}
+.brand__sub {
+  display: block; font-family: var(--sans); font-size: .6875rem;
+  letter-spacing: .17em; text-transform: uppercase; color: var(--brass); margin-top: 2px;
+}
+
+.nav { margin-left: auto; }
+.nav__list { display: flex; align-items: center; gap: var(--sp-5); list-style: none; margin: 0; padding: 0; }
+.nav__list a {
+  text-decoration: none; color: var(--ink-soft); font-size: .9375rem;
+  padding: .5rem 0; display: inline-block; position: relative; white-space: nowrap;
+}
+.nav__list a:hover { color: var(--brass); }
+.nav__list a::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 2px; background: var(--gold); transform: scaleX(0); transition: transform .18s;
+}
+.nav__list a:hover::after, .nav__list a[aria-current="page"]::after { transform: scaleX(1); }
+.nav__list a[aria-current="page"] { color: var(--brass); }
+
+/* ---------- Services dropdown ----------
+   The nav had grown to eight items plus a button, which read as overwhelming.
+   The three service pages now sit inside one menu, so the top level shows five. */
+.nav__item--has-menu { position: relative; }
+.nav__toggle {
+  display: inline-flex; align-items: center; gap: .35em;
+  background: none; border: 0; padding: .5rem 0; margin: 0;
+  font-family: var(--sans); font-size: .9375rem; color: var(--ink-soft);
+  cursor: pointer; position: relative; white-space: nowrap;
+}
+.nav__toggle:hover { color: var(--brass); }
+.nav__toggle::before {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 2px; background: var(--gold); transform: scaleX(0); transition: transform .18s;
+}
+.nav__toggle:hover::before,
+.nav__item--has-menu.is-active .nav__toggle::before { transform: scaleX(1); }
+.nav__item--has-menu.is-active .nav__toggle { color: var(--brass); }
+.nav__toggle svg {
+  width: 10px; height: 10px; fill: currentColor; flex: none;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.nav__toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+.nav__menu {
+  position: absolute; top: calc(100% + 10px); left: -1rem;
+  min-width: 15rem; z-index: 60;
+  background: var(--paper); border: 1px solid var(--line);
+  border-top: 3px solid var(--brass); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  list-style: none; margin: 0; padding: var(--sp-2);
+  display: none;
+}
+.nav__toggle[aria-expanded="true"] + .nav__menu { display: block; }
+.nav__menu li + li { border-top: 1px solid var(--line-soft); }
+.nav__menu a {
+  display: block; padding: .7rem .9rem; font-size: .9375rem;
+  text-decoration: none; color: var(--ink-soft); border-radius: var(--radius);
+}
+.nav__menu a::after { display: none; }
+.nav__menu a:hover { background: var(--brass-50); color: var(--brass); }
+.nav__menu a[aria-current="page"] { color: var(--brass); background: var(--brass-50); }
+
+/* ---------- Language toggle ----------
+   Polski is a language switch, not a peer of "Fees". Treating it as one was
+   part of what made the bar feel crowded. */
+.lang-toggle {
+  flex: none; margin-left: var(--sp-4);
+  display: inline-flex; align-items: center; justify-content: center;
+  /* Fixed box so PL and EN occupy identical space and the header does not
+     jump when the language is switched. */
+  min-width: 4.25rem; min-height: 40px; padding: 0 .7rem;
+  border: 1px solid var(--line); border-radius: 100px;
+  font-size: .8125rem; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-mute); text-decoration: none; white-space: nowrap;
+  transition: border-color .18s, color .18s, background .18s;
+}
+.lang-toggle:hover { border-color: var(--brass); color: var(--brass); background: var(--brass-50); }
+.lang-toggle svg { width: 14px; height: 14px; fill: currentColor; margin-right: .35em; flex: none; }
+
+/* Fixed box so the English and Polish labels ("Make an enquiry" / "Kontakt")
+   occupy the same width. Without this the whole nav slid 60px sideways when
+   the language was switched. */
+.header__cta { flex: none; margin-left: var(--sp-3); min-width: 10rem; }
+
+/* Mobile menu grouping label */
+.mobile-nav__label {
+  font-size: .75rem; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--brass); padding: var(--sp-4) 0 var(--sp-2); margin: 0;
+}
+.header__phone { display: none; }
+
+.burger {
+  display: none; margin-left: auto;
+  width: 48px; height: 48px; padding: 0;
+  background: transparent; border: 1px solid var(--line); border-radius: var(--radius);
+  cursor: pointer; align-items: center; justify-content: center;
+}
+.burger span { display: block; width: 20px; height: 2px; background: var(--brass); position: relative; transition: background .15s; }
+.burger span::before, .burger span::after {
+  content: ''; position: absolute; left: 0; width: 20px; height: 2px; background: var(--brass);
+  transition: transform .2s, top .2s;
+}
+.burger span::before { top: -6px; } .burger span::after { top: 6px; }
+.burger[aria-expanded="true"] span { background: transparent; }
+.burger[aria-expanded="true"] span::before { top: 0; transform: rotate(45deg); }
+.burger[aria-expanded="true"] span::after  { top: 0; transform: rotate(-45deg); }
+
+.mobile-nav {
+  display: none; position: fixed; inset: 0; z-index: 99;
+  background: var(--paper); padding: calc(var(--header-h) + var(--bar-h) + 2rem) var(--sp-5) var(--sp-6);
+  overflow-y: auto;
+}
+.mobile-nav[data-open="true"] { display: block; }
+.mobile-nav ul { list-style: none; margin: 0 0 var(--sp-6); padding: 0; }
+.mobile-nav li + li { border-top: 1px solid var(--line-soft); }
+.mobile-nav a {
+  display: block; padding: var(--sp-4) 0; text-decoration: none;
+  color: var(--ink); font-family: var(--serif); font-size: 1.2rem;
+}
+.mobile-nav .btn { margin-bottom: var(--sp-3); }
+body[data-nav-open="true"] { overflow: hidden; }
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.hero { position: relative; background: var(--forest); color: #fff; overflow: hidden; }
+/* Carries no image. It exists to paint the gradient below. See index.html. */
+.hero__media { position: absolute; inset: 0; }
+.hero__media::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(100deg, rgba(0,20,9,.94) 0%, rgba(0,32,14,.88) 42%, rgba(0,43,18,.55) 72%, rgba(0,43,18,.28) 100%);
+}
+.hero__inner { position: relative; padding-block: clamp(3.25rem, 8vw, 6rem); }
+.hero__content { max-width: 44rem; }
+
+/* ---------- Hero proof panel ----------
+   Fills the right-hand side of the hero, which was empty once the seal came out.
+   A white card so it sits forward of the green, and so the rating is read on the
+   same dark-on-light footing as the step cards below it. */
+.hero__proof {
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  width: min(28vw, 330px);
+  background: var(--paper); border-radius: var(--radius-lg);
+  padding: var(--sp-6);
+  box-shadow: 0 10px 40px rgba(0,0,0,.34);
+}
+.hero__proof-rating { display: flex; align-items: baseline; gap: .5rem; margin: 0; }
+.hero__proof-num { font-family: var(--serif); font-size: 2.6rem; color: var(--ink); line-height: 1; }
+.hero__proof-of  { font-size: .9rem; color: var(--ink-mute); }
+.hero__proof-stars { display: flex; gap: .18rem; margin: var(--sp-3) 0 var(--sp-2); }
+.hero__proof-stars svg { width: 19px; height: 19px; fill: var(--gold-deep); }
+.hero__proof-src { font-size: .8125rem; line-height: 1.5; color: var(--ink-mute); margin: 0 0 var(--sp-4); }
+.hero__proof-link {
+  font-size: .9375rem; color: var(--brass); text-decoration: none;
+  display: inline-flex; align-items: center; gap: .4em; min-height: 24px;
+  border-bottom: 1px solid color-mix(in srgb, var(--brass) 35%, transparent);
+  padding-bottom: 2px; transition: gap var(--dur) var(--ease-out);
+}
+.hero__proof-link::after { content: '→'; }
+.hero__proof-link:hover { gap: .7em; }
+
+/* Below the two-column threshold it stops floating and simply follows the
+   credential chips, full width. The proof is worth as much on a phone. */
+@media (max-width: 1000px) {
+  .hero__proof {
+    position: static; transform: none; width: 100%;
+    max-width: 26rem; margin-top: var(--sp-7);
+  }
+}
+.hero__eyebrow {
+  display: inline-flex; align-items: center; gap: .5em;
+  font-size: .8125rem; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: var(--sp-4);
+}
+.hero__eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+.hero h1 { color: #fff; margin-bottom: var(--sp-5); }
+.hero h1 em { font-style: normal; color: var(--gold); }
+.hero__lede { font-size: clamp(1.0625rem, 1rem + .45vw, 1.25rem); color: #ded9cf; max-width: 40rem; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); margin-top: var(--sp-6); }
+
+.hero__marks {
+  display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6);
+  margin-top: var(--sp-7); padding-top: var(--sp-5);
+  border-top: 1px solid rgba(255,255,255,.16);
+}
+.hero__mark { display: flex; align-items: center; gap: .6em; font-size: .9375rem; color: #ded9cf; }
+.hero__mark svg { width: 18px; height: 18px; fill: var(--gold); flex: none; }
+
+/* ==========================================================================
+   Trust strip
+   ========================================================================== */
+.trust { background: var(--brass-tint); border-bottom: 1px solid var(--line); }
+.trust__grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: var(--sp-5); padding-block: var(--sp-6);
+}
+.trust__item { display: flex; gap: var(--sp-3); align-items: flex-start; }
+.trust__item svg { width: 24px; height: 24px; fill: var(--brass); flex: none; margin-top: 3px; }
+.trust__item strong { display: block; color: var(--ink); font-size: .9375rem; margin-bottom: 2px; }
+.trust__item span { font-size: .875rem; color: var(--ink-mute); line-height: 1.5; display: block; }
+
+/* ---------- Pillars: credentials as four separate, spaced boxes ----------
+   Replaces the joined proof band. Each is a discrete card, heading on top,
+   detail underneath, with real space between them. Each box picks up the
+   accent set on it, so they read as distinct. */
+.pillars {
+  display: grid; gap: var(--sp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(224px, 100%), 1fr));
+}
+.pillar {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-6) var(--sp-5);
+  display: flex; flex-direction: column;
+  transition: box-shadow .2s var(--ease-out), transform .2s var(--ease-out);
+}
+.pillar:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.pillar__icon {
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--accent-soft); display: grid; place-items: center;
+  margin-bottom: var(--sp-4);
+}
+.pillar__icon svg { width: 22px; height: 22px; fill: var(--accent); }
+.pillar__title {
+  font-family: var(--serif); font-size: 1.35rem; line-height: 1.15;
+  color: var(--ink); margin: 0 0 var(--sp-2);
+}
+.pillar__text { font-size: var(--fs-compact); line-height: 1.6; color: var(--ink-soft); margin: 0; }
+
+/* ==========================================================================
+   Cards / grids
+   ========================================================================== */
+.grid { display: grid; gap: var(--sp-5); }
+.grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); }
+/* .grid--2 is auto-fit, so a third child turns it into a three-up. Use this when
+   the row must stay exactly two columns regardless of how many children it holds,
+   for example a two-column row with a full-width card beneath it. */
+.grid--pair { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (max-width: 800px) { .grid--pair { grid-template-columns: 1fr; } }
+.grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); }
+.grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); }
+
+.card {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  padding: var(--sp-6); display: flex; flex-direction: column;
+  transition: border-color .2s, box-shadow .2s, transform .2s;
+}
+/* The whole card is an <a>, so without this the heading AND the body copy inside
+   it were both underlined. The card__more row and the hover state carry the
+   affordance instead; the heading picks the underline back up on hover and focus
+   so the link is never signalled by colour alone. */
+.card--link { text-decoration: none; color: inherit; }
+.card--link h3 { color: var(--ink); }
+.card--link:hover h3, .card--link:focus-visible h3 { text-decoration: underline; text-underline-offset: 3px; }
+.card--link:hover { border-color: var(--brass); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.card__icon {
+  width: 44px; height: 44px; border-radius: 50%; background: var(--brass-tint);
+  display: grid; place-items: center; margin-bottom: var(--sp-4);
+}
+.card__icon svg { width: 21px; height: 21px; fill: var(--brass); }
+.card h3 { margin-bottom: var(--sp-3); }
+.card p { font-size: var(--fs-compact); color: var(--ink-soft); }
+.card__more {
+  margin-top: auto; padding-top: var(--sp-4);
+  font-size: .9375rem; color: var(--brass); text-decoration: none;
+  display: inline-flex; align-items: center; gap: .4em;
+}
+.card--link:hover .card__more { gap: .7em; }
+.card__more::after { content: '→'; transition: transform .2s; }
+
+/* Audience split cards */
+/* The two cards are the same height, but the rule under each heading was not level:
+   "Company and corporate documents for use abroad" wraps to two lines and the other
+   heading does not, so one head was 11px taller than its neighbour. Subgrid lets the
+   head and the body share the parent's row tracks, which lines the dividers up
+   however the headings wrap. */
+.audience {
+  display: grid; gap: var(--sp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  grid-template-rows: auto 1fr;
+}
+.audience__card {
+  border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden;
+  display: flex; flex-direction: column; background: var(--paper);
+}
+@supports (grid-template-rows: subgrid) {
+  .audience__card { display: grid; grid-template-rows: subgrid; grid-row: span 2; }
+}
+/* Without subgrid the dividers cannot align automatically, so the head is given
+   room for a two-line heading and they line up that way instead. */
+@supports not (grid-template-rows: subgrid) {
+  @media (min-width: 801px) { .audience__head h3 { min-height: 2.4em; } }
+}
+.audience__card--feature { border-color: var(--brass); box-shadow: var(--shadow-md); }
+.audience__head { padding: var(--sp-6) var(--sp-6) var(--sp-4); border-bottom: 1px solid var(--line-soft); }
+.audience__card--feature .audience__head { background: var(--forest); border-bottom: none; }
+.audience__card--feature .audience__head h3 { color: #fff; }
+.audience__card--feature .audience__head p { color: #cfc9bd; margin-bottom: 0; }
+.audience__card--feature .audience__head .eyebrow { color: var(--gold); }
+.audience__body { padding: var(--sp-5) var(--sp-6) var(--sp-6); display: flex; flex-direction: column; flex: 1; }
+.audience__body .btn { margin-top: auto; }
+
+/* ---------- Lists ---------- */
+.ticks { list-style: none; margin: 0 0 var(--sp-5); padding: 0; }
+.ticks li { position: relative; padding-left: 1.85rem; margin-bottom: var(--sp-3); font-size: var(--fs-compact); }
+.ticks li::before {
+  content: ''; position: absolute; left: 0; top: .48em; width: 1.05rem; height: .58rem;
+  border-left: 2px solid var(--gold-deep); border-bottom: 2px solid var(--gold-deep);
+  transform: rotate(-45deg);
+}
+.section--dark .ticks li::before { border-color: var(--gold); }
+
+.prose { max-width: 68ch; }
+.prose h2 { margin-top: var(--sp-7); }
+.prose h2:first-child { margin-top: 0; }
+.prose h3 { margin-top: var(--sp-6); }
+.prose ul, .prose ol { padding-left: 1.35rem; margin-bottom: var(--sp-5); }
+.prose li { margin-bottom: var(--sp-2); }
+.prose .ticks { padding-left: 0; }
+
+/* ---------- Steps ---------- */
+.steps { counter-reset: step; display: grid; gap: var(--sp-5); grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
+.step { position: relative; padding-top: var(--sp-6); }
+.step::before {
+  counter-increment: step; content: counter(step, decimal-leading-zero);
+  position: absolute; top: 0; left: 0;
+  font-family: var(--serif); font-size: 1.6rem; color: var(--gold-deep); line-height: 1;
+}
+.step h3 { font-size: 1.2rem; margin-bottom: var(--sp-2); }
+.step p { font-size: var(--fs-compact); line-height: 1.65; margin-bottom: 0; }
+.section--dark .step::before { color: var(--gold); }
+
+/* ---------- Fees table ---------- */
+.table-scroll { overflow-x: auto; margin-bottom: var(--sp-5); -webkit-overflow-scrolling: touch; }
+table.data { width: 100%; border-collapse: collapse; min-width: 34rem; font-size: .9688rem; }
+table.data th, table.data td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--line); vertical-align: top; }
+table.data thead th { background: var(--paper-deep); color: var(--ink); font-weight: 400; letter-spacing: .05em; text-transform: uppercase; font-size: .8125rem; }
+table.data tbody tr:hover { background: var(--paper-warm); }
+table.data td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+/* Plain white cards. They previously carried a gold left bar and a gold wash,
+   which sat on a gold section background and read as decoration competing with
+   the number. The price is the thing to look at. */
+.pricecard {
+  border: 1px solid var(--line);
+  border-radius: var(--radius); padding: var(--sp-5) var(--sp-6); background: var(--paper);
+  margin-bottom: var(--sp-5); box-shadow: var(--shadow-sm);
+}
+/* Excluded explicitly: .pricecard p out-specifies both .eyebrow and
+   .pricecard__amount, so without the :not() it would flatten the label and
+   the price itself to body size. */
+.pricecard p:not(.eyebrow):not(.pricecard__amount) { font-size: var(--fs-compact); }
+.pricecard__amount { font-family: var(--serif); font-size: 2rem; color: var(--ink); line-height: 1; }
+.pricecard__amount small { font-size: .875rem; font-family: var(--sans); color: var(--ink-mute); }
+
+/* ---------- FAQ ---------- */
+.faq { border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary {
+  cursor: pointer; list-style: none; padding: var(--sp-5) 2.5rem var(--sp-5) 0;
+  font-family: var(--serif); font-size: 1.125rem; color: var(--ink);
+  position: relative; display: block;
+}
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after {
+  content: ''; position: absolute; right: .5rem; top: 50%; width: 10px; height: 10px;
+  border-right: 2px solid var(--brass); border-bottom: 2px solid var(--brass);
+  transform: translateY(-70%) rotate(45deg); transition: transform .2s;
+}
+.faq details[open] summary::after { transform: translateY(-30%) rotate(-135deg); }
+.faq summary:hover { color: var(--brass); }
+.faq__body { padding: 0 2.5rem var(--sp-5) 0; }
+.faq__body p:last-child { margin-bottom: 0; }
+
+/* ---------- Reviews ---------- */
+.review {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  padding: var(--sp-6); display: flex; flex-direction: column;
+}
+.review__stars { display: flex; gap: 3px; margin-bottom: var(--sp-4); }
+.review__stars svg { width: 17px; height: 17px; fill: var(--gold-deep); }
+.review blockquote { margin: 0 0 var(--sp-4); font-size: 1.0625rem; color: var(--ink-soft); line-height: 1.65; }
+.review blockquote::before { content: '\201C'; color: var(--gold-deep); font-family: var(--serif); font-size: 1.4em; line-height: 0; margin-right: .08em; vertical-align: -.35em; }
+.review figcaption { margin-top: auto; font-size: .875rem; color: var(--ink-mute); }
+.review figcaption strong { color: var(--ink); display: block; font-weight: 400; }
+.review__verified {
+  display: inline-flex; align-items: center; gap: .4em; margin-bottom: var(--sp-4);
+  font-size: .8125rem; letter-spacing: .04em; text-transform: uppercase; color: var(--ok);
+}
+.review__verified svg { width: 16px; height: 16px; fill: currentColor; }
+.reviews-note { font-size: .875rem; color: var(--ink-mute); }
+
+.placeholder-note {
+  border: 1px dashed var(--brass); background: var(--brass-tint);
+  border-radius: var(--radius); padding: var(--sp-4) var(--sp-5);
+  font-size: .875rem; color: var(--brass-deep);
+}
+.placeholder-note strong { color: var(--brass-deep); }
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+.form-panel {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 4vw, 2.5rem); box-shadow: var(--shadow-sm);
+}
+.field { margin-bottom: var(--sp-5); }
+.field > label, .fieldset__legend {
+  display: block; margin-bottom: var(--sp-2);
+  font-size: .9375rem; color: var(--ink); letter-spacing: .01em;
+}
+.field .hint { display: block; font-size: .8125rem; color: var(--ink-mute); margin-top: var(--sp-1); line-height: 1.5; }
+.req { color: var(--error); }
+.optional { color: var(--ink-mute); font-size: .8125rem; }
+
+.field input[type="text"], .field input[type="email"], .field input[type="tel"],
+.field input[type="date"], .field input[type="number"], .field select, .field textarea {
+  width: 100%; padding: .75rem .9rem; min-height: 48px;
+  background: var(--paper); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  transition: border-color .15s, box-shadow .15s;
+}
+.field textarea { min-height: 140px; resize: vertical; line-height: 1.6; }
+.field select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath fill='%2369502b' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 1rem center; background-size: 12px;
+  padding-right: 2.5rem;
+}
+.field input:hover, .field select:hover, .field textarea:hover { border-color: var(--brass); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--brass); box-shadow: 0 0 0 3px rgba(105,80,43,.14); outline: none;
+}
+.field input[aria-invalid="true"], .field select[aria-invalid="true"], .field textarea[aria-invalid="true"] {
+  border-color: var(--error); background: var(--error-bg);
+}
+.field__error { display: none; color: var(--error); font-size: .8125rem; margin-top: var(--sp-1); }
+.field__error[data-show="true"] { display: block; }
+
+/* ---------- File input ----------
+   A native file input inherits none of the form styling and looks like a
+   default browser control next to fields that do not. Boxed to match, with the
+   picker itself styled as a small ghost button. Dashed border so it reads as a
+   drop area rather than a text field waiting to be typed in. */
+.field input[type="file"] {
+  display: block; width: 100%;
+  font-size: var(--fs-compact); color: var(--ink-soft);
+  padding: var(--sp-4);
+  border: 1px dashed var(--line); border-radius: var(--radius);
+  background: var(--paper-warm);
+  transition: border-color var(--dur-fast), background var(--dur-fast);
+}
+.field input[type="file"]:hover { border-color: var(--brass); background: var(--brass-50); }
+/* Uploads not switched on yet: the field stays visible so the feature is
+   discoverable, but it is plainly inert rather than looking clickable. */
+.field[data-disabled="true"] input[type="file"] { opacity: .55; cursor: not-allowed; background: var(--paper-deep); }
+.field[data-disabled="true"] input[type="file"]:hover { border-color: var(--line); background: var(--paper-deep); }
+.field[data-disabled="true"] input[type="file"]::file-selector-button { cursor: not-allowed; }
+.field input[type="file"]::file-selector-button {
+  font: inherit; font-size: .9375rem; cursor: pointer;
+  margin-right: var(--sp-4); padding: .5em 1.1em;
+  color: var(--brass); background: var(--paper);
+  border: 1px solid var(--brass); border-radius: var(--radius);
+  transition: background var(--dur-fast), color var(--dur-fast);
+}
+.field input[type="file"]::file-selector-button:hover { background: var(--brass); color: #fff; }
+@media (max-width: 520px) {
+  /* Stacked, because the filename and the button together overflow a narrow
+     phone and the filename is the part that gets clipped. */
+  .field input[type="file"]::file-selector-button { display: block; margin: 0 0 var(--sp-3); width: 100%; }
+}
+
+.fieldset { border: 0; margin: 0 0 var(--sp-5); padding: 0; }
+.fieldset__legend { padding: 0; }
+.choices { display: grid; gap: var(--sp-2); grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); }
+.choice {
+  display: flex; align-items: flex-start; gap: .6rem;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  padding: .75rem .9rem; cursor: pointer; min-height: 48px;
+  transition: border-color .15s, background .15s;
+  font-size: .9375rem;
+}
+.choice:hover { border-color: var(--brass); background: var(--paper-warm); }
+.choice input { margin: .28rem 0 0; accent-color: var(--brass); width: 18px; height: 18px; flex: none; }
+.choice:has(input:checked) { border-color: var(--brass); background: var(--brass-tint); }
+.choice:has(input:focus-visible) { outline: 3px solid var(--gold-deep); outline-offset: 2px; }
+
+.form-row { display: grid; gap: var(--sp-4); grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); }
+.form-note { font-size: .8125rem; color: var(--ink-mute); line-height: 1.6; }
+/* Confirmation shown in place of the form after a successful send */
+.form-success { text-align: center; padding: var(--sp-4) 0; }
+.form-success:focus { outline: none; }
+.form-success__tick { width: 56px; height: 56px; margin: 0 auto var(--sp-5); }
+.form-success__tick svg { width: 100%; height: 100%; fill: var(--ok); }
+.form-success h2 { font-size: clamp(1.35rem, 1.15rem + .8vw, 1.7rem); margin-bottom: var(--sp-4); }
+.form-success p { max-width: 34rem; margin-inline: auto; }
+
+.form-status { padding: var(--sp-4) var(--sp-5); border-radius: var(--radius); margin-bottom: var(--sp-5); display: none; }
+.form-status a { color: inherit; font-weight: 400; }
+.form-status[data-state="error"] { display: block; background: var(--error-bg); color: var(--error); border: 1px solid var(--error); }
+.form-status[data-state="ok"] { display: block; background: #e9f4ec; color: var(--ok); border: 1px solid var(--ok); }
+.honey { position: absolute; left: -9999px; }
+
+/* conditional blocks */
+[data-when] { display: none; }
+[data-when][data-visible="true"] { display: block; }
+
+/* ==========================================================================
+   Contact aside
+   ========================================================================== */
+.contact-grid { display: grid; gap: var(--sp-7); grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
+.contact-card {
+  background: var(--forest); color: #ded9cf; border-radius: var(--radius-lg);
+  padding: var(--sp-6);
+}
+.contact-card h3 { color: #fff; }
+.contact-card a { color: #fff; }
+.contact-card dl { margin: 0; }
+.contact-card dt {
+  font-size: .75rem; letter-spacing: .13em; text-transform: uppercase;
+  color: var(--gold); margin-top: var(--sp-5);
+}
+.contact-card dt:first-child { margin-top: 0; }
+.contact-card dd { margin: var(--sp-1) 0 0; font-size: 1.0625rem; }
+.contact-card dd.small { font-size: .9375rem; line-height: 1.6; }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+/* Slimmed down. It was four columns deep, one of which repeated the entire
+   header navigation, on top of a two-line Latin motto and 4rem of padding. That
+   is what made it read as a wedge rather than a footer. Now three columns, a
+   smaller mark and tighter blocks. */
+.site-footer { background: var(--forest); color: #b9b3a7; font-size: .9375rem; padding-block: var(--sp-6) var(--sp-4); }
+.site-footer h4 { color: #fff; font-size: .8125rem; letter-spacing: .13em; margin-bottom: var(--sp-3); }
+.site-footer a { color: #ded9cf; text-decoration: none; }
+.site-footer a:hover { color: var(--gold); text-decoration: underline; }
+.site-footer p { margin-bottom: var(--sp-2); }
+.footer__grid {
+  display: grid; gap: var(--sp-5) var(--sp-6);
+  grid-template-columns: 1.5fr 1fr 1fr;
+  align-items: start;
+}
+@media (max-width: 780px) {
+  .footer__grid { grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); }
+}
+.footer__brand img { width: 60px; height: 60px; margin-bottom: var(--sp-4); }
+.footer__brand p { max-width: 26rem; }
+.footer__list { list-style: none; margin: 0; padding: 0; }
+.footer__list li { margin-bottom: var(--sp-2); }
+.footer__legal {
+  margin-top: var(--sp-5); padding-top: var(--sp-4);
+  border-top: 1px solid rgba(255,255,255,.13);
+  font-size: .8125rem; color: #a9a296; line-height: 1.6;
+}
+.footer__legal p { margin-bottom: var(--sp-3); }
+.footer__meta { display: flex; flex-wrap: wrap; gap: var(--sp-2) var(--sp-5); align-items: center; }
+/* WCAG 2.5.8 wants 24x24. These sit on their own in a flex row rather than
+   inline in a sentence, so the inline exception does not cover them. */
+.footer__meta a { display: inline-flex; align-items: center; min-height: 24px; }
+/* #a9a296, not darker: the audit measured #8f897d at 4.46:1 on the forest
+   green, a hair under the 4.5:1 requirement. This is the footer's established
+   muted tone and clears it. */
+.footer__copyright { margin: var(--sp-3) 0 0; font-size: .8125rem; color: #a9a296; }
+
+/* ---------- Client information band (Rule 14.2) ----------
+   Rule 14.2 of the Notaries Practice Rules requires clear public access to
+   information on pricing, service, complaints, redress and regulatory status.
+   The footer links alone read as small print, which was exactly Patrycja's
+   worry, so the five items also get their own visible band on every page,
+   directly above the footer. Sitting there it also separates the dark CTA band
+   from the dark footer, which used to butt together. */
+.clientinfo {
+  background: var(--paper-warm);
+  border-top: 3px solid var(--gold);
+  padding-block: var(--sp-7);
+}
+.clientinfo__inner {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-4) var(--sp-7);
+}
+.clientinfo__lead { max-width: 23rem; }
+.clientinfo__title {
+  font-family: var(--serif); font-size: 1.5rem; font-weight: 600;
+  color: var(--forest); margin: 0 0 var(--sp-1); line-height: 1.2;
+}
+.clientinfo__sub { margin: 0; font-size: 1rem; color: var(--ink-mute); }
+.clientinfo__links {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-wrap: wrap; gap: var(--sp-2);
+  flex: 1 1 24rem;
+}
+/* The pills size to their text and wrap as whole units. Without this the list
+   items shrink below their content and the labels break mid-phrase, which
+   turned "Redress & insurance" into three stacked lines. */
+.clientinfo__links li { flex: 0 0 auto; }
+.clientinfo__links a {
+  display: inline-flex; align-items: center; white-space: nowrap;
+  padding: .5em 1em; min-height: 40px;
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 100px; text-decoration: none;
+  font-size: .9375rem; color: var(--ink);
+  transition: border-color var(--dur-fast), background var(--dur-fast);
+}
+.clientinfo__links a:hover { border-color: var(--brass); background: var(--brass-50); color: var(--brass-900); }
+
+/* Regulatory doc list */
+.doclist { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); }
+.doclist a {
+  display: flex; align-items: center; gap: .7rem; padding: var(--sp-4);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  text-decoration: none; color: var(--ink); font-size: .9375rem; min-height: 48px;
+  transition: border-color .15s, background .15s;
+}
+.doclist a:hover { border-color: var(--brass); background: var(--paper-warm); }
+.doclist svg { width: 18px; height: 18px; fill: var(--brass); flex: none; }
+
+/* ---------- Breadcrumb ---------- */
+.crumbs { padding-block: var(--sp-4); font-size: .875rem; color: var(--ink-mute); border-bottom: 1px solid var(--line-soft); }
+.crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: .5rem; margin: 0; padding: 0; }
+.crumbs li + li::before { content: '/'; margin-right: .5rem; color: var(--line); }
+.crumbs a { color: var(--ink-mute); text-decoration: none; }
+.crumbs a:hover { color: var(--brass); text-decoration: underline; }
+
+/* ---------- Page head ---------- */
+.page-head { background: var(--paper-warm); border-bottom: 1px solid var(--line); padding-block: clamp(2.5rem, 6vw, 4rem); }
+.page-head h1 { margin-bottom: var(--sp-4); }
+.page-head .lede { max-width: 46rem; margin-bottom: 0; }
+
+/* ---------- Page head carrying a photograph ----------
+   Service pages had the title alone across the full width, leaving a large
+   empty right column, and then a short paragraph stranded beside a tall image
+   in the section below. The photograph belongs up here next to the title, and
+   it is pulled down so it straddles the join between the two background
+   colours rather than sitting politely inside one of them. */
+.page-head--media { position: relative; z-index: 2; padding-bottom: 0; border-bottom: 0; }
+.page-head--media .lede { max-width: none; }
+.page-head__grid {
+  display: grid;
+  grid-template-columns: minmax(min(360px, 100%), 1.05fr) minmax(min(280px, 100%), .95fr);
+  gap: clamp(var(--sp-5), 4vw, var(--sp-8));
+  align-items: end;
+}
+.page-head__body { padding-bottom: clamp(2.5rem, 6vw, 4rem); }
+.page-head__figure {
+  margin: 0 0 calc(-1 * clamp(1.75rem, 4vw, 3.25rem));
+  position: relative; z-index: 1;
+}
+/* Stacked on a phone the overhang has nothing to straddle, so it is dropped
+   and the figure simply closes the page head. */
+@media (max-width: 800px) {
+  .page-head__grid { grid-template-columns: 1fr; }
+  .page-head__body { padding-bottom: var(--sp-5); }
+  .page-head__figure { margin-bottom: calc(-1 * var(--sp-6)); }
+}
+
+/* ---------- Two-route chooser (apostille page) ----------
+   Previously two plain cards of very different heights floating in a narrow
+   column. Equal height, an accent rule, and a plain-English trigger line at
+   the top of each so the reader can tell within a second which one is theirs. */
+.routes { display: grid; gap: var(--sp-5); grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); align-items: stretch; }
+.route {
+  display: flex; flex-direction: column;
+  background: var(--paper); border: 1px solid var(--line);
+  border-top: 3px solid var(--accent); border-radius: var(--radius);
+  padding: var(--sp-6); box-shadow: var(--shadow-sm);
+}
+.route__when {
+  font-size: .8125rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent-ink); margin-bottom: var(--sp-3);
+}
+.route h3 { margin-bottom: var(--sp-3); }
+.route p:last-of-type { margin-bottom: 0; }
+.route__foot { margin-top: auto; padding-top: var(--sp-5); }
+
+/* ---------- Fact list ----------
+   Reference detail, set as rows rather than as feature cards, so a page can
+   state the regulatory facts without restating them as a sales point. */
+.factlist { margin: 0; border-top: 1px solid var(--line); }
+.factlist__row {
+  display: grid; grid-template-columns: minmax(min(180px, 100%), .35fr) 1fr;
+  gap: var(--sp-3) var(--sp-5);
+  padding: var(--sp-5) 0; border-bottom: 1px solid var(--line);
+}
+.factlist dt { font-weight: 400; color: var(--ink); letter-spacing: .02em; }
+.factlist dd { margin: 0; color: var(--ink-soft); }
+@media (max-width: 620px) {
+  .factlist__row { grid-template-columns: 1fr; gap: var(--sp-2); }
+  .factlist dt { font-size: .8125rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent-ink); }
+}
+
+/* ---------- Portrait placeholder ----------
+   UNUSED since 2026-07-29: her real photograph landed and now fills the slot on
+   practice.html. Kept in case another portrait slot needs holding open. */
+.portrait-slot {
+  aspect-ratio: 4 / 5; border-radius: var(--radius-lg);
+  background: linear-gradient(155deg, var(--gold-200) 0%, var(--gold) 52%, var(--gold-deep) 100%);
+  display: grid; place-items: center; padding: var(--sp-6); text-align: center;
+}
+.portrait-slot p {
+  margin: 0; font-size: .8125rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--brass-900);
+}
+
+/* ---------- CTA band ---------- */
+.cta-band { background: var(--forest); color: #ded9cf; }
+.cta-band__inner {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--sp-5); padding-block: clamp(2.5rem, 5vw, 3.5rem);
+}
+.cta-band h2 { color: #fff; margin-bottom: var(--sp-2); }
+.cta-band p { margin-bottom: 0; max-width: 34rem; }
+.cta-band__actions { display: flex; flex-wrap: wrap; gap: var(--sp-3); }
+
+/* ---------- Sticky mobile call bar ---------- */
+.mobile-cta {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 98;
+  background: var(--paper); border-top: 1px solid var(--line);
+  padding: .6rem .75rem calc(.6rem + env(safe-area-inset-bottom));
+  gap: .5rem; box-shadow: 0 -2px 14px rgba(28,26,22,.09);
+}
+.mobile-cta .btn { flex: 1; padding-inline: .75rem; font-size: .9375rem; }
+
+/* ==========================================================================
+   v2 additions: accent system, motion, and richer surfaces
+   ========================================================================== */
+
+/* ---------- Per-service accent ----------
+   Put one of these on a section, card or list and everything inside picks up
+   the hue: rules, icon wells, tick marks, quiet links. */
+/* --accent is the drawing colour: rules, borders, icon fills, tick marks.
+   --accent-ink is the same idea for anything that is READ. They are identical
+   for every accent except gold, because gold-deep is only 2.2:1 on a pale
+   background and fails as text. Anything that renders words must use
+   --accent-ink; anything that draws a line may use --accent. */
+.accent-brass  { --accent: var(--brass);      --accent-soft: var(--brass-100); --accent-ink: var(--brass); }
+.accent-petrol { --accent: var(--petrol-800); --accent-soft: var(--petrol-100); --accent-ink: var(--petrol-800); }
+.accent-forest { --accent: var(--forest-700); --accent-soft: var(--sage-100);  --accent-ink: var(--forest-700); }
+.accent-gold   { --accent: var(--gold-deep);  --accent-soft: var(--gold-200);  --accent-ink: var(--brass); }
+.accent-wax    { --accent: var(--wax);        --accent-soft: var(--wax-100);   --accent-ink: var(--wax); }
+
+/* On a dark surface the relationship inverts: the readable accent is the pale
+   gold, never the dark brass. This is what "How it works" was getting wrong,
+   sitting brass-on-forest at 1.6:1. */
+.section--forest, .section--ink, .section--dark,
+.cta-band, .contact-card, .site-footer, .proof { --accent-ink: var(--gold-200); }
+.section--forest .eyebrow, .section--ink .eyebrow, .section--dark .eyebrow,
+.cta-band .eyebrow, .contact-card .eyebrow, .site-footer .eyebrow, .proof .eyebrow {
+  color: var(--gold-200);
+}
+
+/* .contact-card a is white so the address block reads on green, but it also
+   caught the gold Call now button inside it, putting white on gold at 1.6:1. */
+.contact-card .btn--gold { color: var(--forest); }
+
+/* ---------- Motion: scroll reveal ----------
+   site.js adds .reveal-ready to <html> only when it will actually animate.
+   Without JS, or with reduced motion, everything is visible from the start. */
+.reveal-ready .reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--dur-slow) var(--ease-out), transform var(--dur-slow) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal-ready .reveal[data-shown="true"] { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ready .reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* ---------- Cards, v2 ---------- */
+.card { position: relative; overflow: hidden; }
+.card--accent { border-top: 3px solid var(--accent); }
+.card__icon { background: var(--accent-soft); transition: background var(--dur) var(--ease-out); }
+.card__icon svg { fill: var(--accent); }
+.card--link:hover { border-color: var(--accent); }
+.card--link:hover .card__icon { background: var(--accent); }
+.card--link:hover .card__icon svg { fill: #fff; }
+.card__more { color: var(--accent-ink); }
+
+/* Cards that carry a quiet engraved corner */
+.card--engraved::after {
+  content: ''; position: absolute; right: -40px; bottom: -40px;
+  width: 150px; height: 150px; border-radius: 50%;
+  background-image: var(--engrave); background-size: 150px 150px;
+  opacity: .5; pointer-events: none;
+}
+
+/* ---------- Proof bar: credentials as a row of facts ---------- */
+.proof {
+  background: var(--forest); color: #cfcabf;
+  border-block: 1px solid rgba(255,255,255,.09);
+}
+.proof__grid {
+  display: grid; gap: var(--sp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(190px, 100%), 1fr));
+  padding-block: var(--sp-6);
+}
+.proof__item { text-align: center; padding-inline: var(--sp-3); position: relative; }
+.proof__item + .proof__item::before {
+  content: ''; position: absolute; left: 0; top: 12%; bottom: 12%;
+  width: 1px; background: rgba(255,255,255,.13);
+}
+.proof__value {
+  display: block; font-family: var(--serif); font-size: clamp(1.5rem, 1.2rem + 1.1vw, 2rem);
+  color: var(--gold); line-height: 1.1; margin-bottom: var(--sp-2);
+}
+.proof__label { font-size: .8125rem; color: #b0aa9f; line-height: 1.5; display: block; }
+
+/* ---------- Timeline: a document's journey ---------- */
+.timeline { position: relative; padding-left: 0; list-style: none; margin: 0; }
+.timeline::before {
+  content: ''; position: absolute; left: 15px; top: 8px; bottom: 8px;
+  width: 2px; background: linear-gradient(var(--accent), var(--accent-soft));
+}
+.timeline > li { position: relative; padding: 0 0 var(--sp-6) 3.25rem; }
+.timeline > li:last-child { padding-bottom: 0; }
+.timeline__dot {
+  position: absolute; left: 0; top: 2px;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--paper); border: 2px solid var(--accent);
+  display: grid; place-items: center;
+  font-family: var(--serif); font-size: .9375rem; color: var(--accent-ink);
+}
+.timeline h3 { font-size: 1.15rem; margin-bottom: var(--sp-2); }
+.timeline p { font-size: var(--fs-compact); margin-bottom: 0; }
+.section--forest .timeline__dot, .section--ink .timeline__dot,
+.section--dark .timeline__dot { background: var(--forest); border-color: var(--gold); color: var(--gold); }
+.section--forest .timeline::before, .section--ink .timeline::before,
+.section--dark .timeline::before { background: linear-gradient(var(--gold), rgba(236,201,110,.15)); }
+
+/* ---------- Badges and pills ---------- */
+.badge {
+  display: inline-flex; align-items: center; gap: .4em;
+  padding: .3em .8em; border-radius: 100px;
+  font-size: .75rem; letter-spacing: .07em; text-transform: uppercase;
+  background: var(--accent-soft); color: var(--accent-ink);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+}
+.badge svg { width: 13px; height: 13px; fill: currentColor; }
+.badge--wax { background: var(--wax-100); color: var(--wax); border-color: rgba(140,47,57,.25); }
+.badge--onDark { background: rgba(236,201,110,.13); color: var(--gold); border-color: rgba(236,201,110,.3); }
+
+/* ---------- Seal watermark ---------- */
+.sealmark {
+  position: absolute; pointer-events: none; user-select: none;
+  color: currentColor; opacity: .07;
+}
+.sealmark svg { width: 100%; height: auto; }
+
+/* ---------- Hero, v2 ---------- */
+.hero__media::after {
+  background:
+    radial-gradient(ellipse 80% 60% at 12% 30%, rgba(20,97,95,.42) 0%, transparent 60%),
+    linear-gradient(100deg, rgba(0,20,9,.95) 0%, rgba(0,32,14,.9) 40%, rgba(7,61,29,.62) 72%, rgba(20,97,95,.4) 100%);
+}
+.hero__inner { position: relative; z-index: 1; }
+/* The guilloche runs uninterrupted across the dark green again. It was
+   previously masked to clear a disc on the right so it would not clash with the
+   seal's own concentric rings; the seal has gone, so the disc has gone with it
+   and the pattern is the only circular motif in the hero. */
+.hero__engrave {
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image: var(--engrave); background-size: 260px 260px;
+  opacity: .34; filter: invert(1) brightness(2.4);
+  -webkit-mask-image: linear-gradient(to left, #000 0%, transparent 68%);
+  mask-image: linear-gradient(to left, #000 0%, transparent 68%);
+}
+/* UNUSED. The .hero__seal markup was removed from index.html because its rings
+   clashed with the guilloche. Kept so the mark can be restored without rebuilding
+   it; see the note in index.html for the markup that went with it. */
+.hero__seal {
+  position: absolute; right: 8%; top: 50%; transform: translateY(-50%);
+  width: min(34vw, 380px); color: var(--gold); z-index: 0; pointer-events: none;
+}
+.hero__seal-rings { opacity: .16; }
+.hero__seal-mark { opacity: .62; }
+@media (max-width: 1100px) { .hero__seal { right: 2%; } }
+.hero__seal svg { width: 100%; height: auto; }
+.hero__mark svg { fill: var(--gold); }
+
+/* Hero marks become chips rather than plain text */
+.hero__marks { gap: var(--sp-3); }
+.hero__mark {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 100px; padding: .45em 1em;
+  backdrop-filter: blur(4px);
+}
+
+/* ---------- Pricecards, v3 ----------
+   The v2 accent wash and the dashed ring are gone. On a tinted section a white
+   card separates cleanly on its own and the figure is what carries the weight. */
+.pricecard { position: relative; }
+.pricecard__amount { color: var(--brass-900); }
+
+/* ---------- Ticks pick up the accent ---------- */
+.ticks li::before { border-color: var(--accent); }
+.section--forest .ticks li::before, .section--ink .ticks li::before { border-color: var(--gold); }
+
+/* ---------- Audience cards, v2 ---------- */
+.audience__card--feature .audience__head {
+  background: linear-gradient(150deg, var(--forest-800), var(--forest-950));
+  position: relative; overflow: hidden;
+}
+.audience__card--feature .audience__head::after {
+  content: ''; position: absolute; right: -50px; bottom: -60px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background-image: var(--engrave); background-size: 180px 180px;
+  opacity: .3; filter: invert(1) brightness(2);
+}
+
+/* ---------- Section heading with a rule ---------- */
+.section-head { max-width: 46rem; margin-bottom: var(--sp-7); }
+.section-head .eyebrow { display: inline-flex; align-items: center; gap: .6em; }
+.section-head .eyebrow::before {
+  content: ''; width: 26px; height: 1px; background: var(--accent);
+}
+.section--forest .section-head .eyebrow::before,
+.section--ink .section-head .eyebrow::before,
+.section--dark .section-head .eyebrow::before { background: var(--gold); }
+.section--forest .section-head .eyebrow,
+.section--ink .section-head .eyebrow,
+.section--dark .section-head .eyebrow { color: var(--gold); }
+
+/* ---------- Steps, v2 ---------- */
+.step { padding-top: var(--sp-7); }
+.step::before {
+  color: var(--accent-ink); font-size: 2rem;
+  border-top: 2px solid var(--accent); padding-top: var(--sp-3); line-height: 1;
+}
+.section--forest .step::before, .section--ink .step::before,
+.section--dark .step::before { color: var(--gold); border-color: rgba(236,201,110,.4); }
+
+/* Steps on a dark section are WHITE CARDS. This went through three rounds:
+   unboxed text, then a translucent panel that let the engraved circles run
+   through the copy, then a solid green panel. White is the end of that road,
+   because it puts the copy back on the same dark-on-light footing as the rest
+   of the site and nothing on a dark ground has to be argued about again.
+   The dark section still reads as a dark band; the cards sit on top of it. */
+.section--forest .steps, .section--ink .steps, .section--dark .steps { gap: var(--sp-4); }
+.section--forest .step, .section--ink .step, .section--dark .step {
+  padding: var(--sp-6); border-radius: var(--radius-lg);
+  background: var(--paper);
+  border: 1px solid var(--gold);
+  box-shadow: 0 3px 16px rgba(0,0,0,.24);
+}
+/* Gold, but --gold-ink rather than --gold: the brand gold is 1.6:1 on white and
+   would be a decorative number nobody can read. The border is not type, so it
+   takes the brand gold at full strength. */
+.section--forest .step::before, .section--ink .step::before, .section--dark .step::before {
+  position: static; display: block; border-top: none; padding-top: 0;
+  margin-bottom: var(--sp-3); font-size: 1.75rem; color: var(--gold-ink);
+}
+.section--forest .step h3, .section--ink .step h3, .section--dark .step h3 { color: var(--ink); }
+.section--forest .step p, .section--ink .step p, .section--dark .step p {
+  color: var(--ink-soft); font-size: 1.0625rem; line-height: 1.7;
+}
+
+/* ---------- CTA band, v2 ---------- */
+.cta-band {
+  background: linear-gradient(120deg, var(--forest-950) 0%, var(--forest) 45%, var(--petrol-900) 100%);
+  position: relative; overflow: hidden;
+}
+.cta-band::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: var(--engrave); background-size: 220px 220px;
+  opacity: .3; filter: invert(1) brightness(2.2);
+  -webkit-mask-image: linear-gradient(to right, #000, transparent 55%);
+  mask-image: linear-gradient(to right, #000, transparent 55%);
+}
+.cta-band__inner { position: relative; z-index: 1; }
+
+/* ---------- Callbar, v2 ---------- */
+.callbar { background: linear-gradient(90deg, var(--forest-950), var(--forest) 45%, var(--petrol-900)); }
+
+/* ---------- Link with a moving underline ---------- */
+.quiet-link {
+  color: var(--accent-ink); text-decoration: none; font-size: .9375rem;
+  display: inline-flex; align-items: center; gap: .4em;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  padding-bottom: 2px; transition: gap var(--dur) var(--ease-out), border-color var(--dur) var(--ease-out);
+}
+.quiet-link:hover { gap: .7em; border-color: var(--accent); color: var(--accent-ink); }
+.quiet-link::after { content: '→'; }
+
+/* ---------- Feature row: text beside a framed image ----------
+   Every photograph the practice supplied is a 3:4 portrait taken on a phone.
+   Dropped into a content column at its native ratio each one ran 550-750px
+   tall and swallowed the text beside it. So the ratio is decided here, by
+   role, and the source is cropped to fit rather than the layout bending to
+   the source. object-position is set per placement because the subject sits
+   in a different part of the frame in each photograph. */
+/* .framed is decoration only: the offset accent outline behind the picture.
+   The cropping behaviour belongs to .figure, so a figure can be used with or
+   without the outline and still hold its ratio. */
+.framed { position: relative; }
+.framed img { position: relative; z-index: 1; }
+.framed::before {
+  content: ''; position: absolute; z-index: 0;
+  inset: 18px -18px -18px 18px; border-radius: var(--radius-lg);
+  border: 1px solid var(--accent); opacity: .35;
+}
+
+/* Roles. --focus is the object-position, overridable inline per placement. */
+.figure { --focus: 50% 50%; margin: 0; }
+.figure img {
+  border-radius: var(--radius-lg);
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: var(--focus);
+}
+.figure--inset   { aspect-ratio: 4 / 3; }   /* beside a column of text */
+.figure--band    { aspect-ratio: 21 / 8; }  /* full width of the column  */
+.figure--tall    { aspect-ratio: 4 / 5; }   /* deliberately upright      */
+.figure--square  { aspect-ratio: 1 / 1; }
+.figure > picture { display: block; height: 100%; }
+
+.figure__caption {
+  margin-top: var(--sp-3); font-size: .8125rem; line-height: 1.5;
+  color: var(--ink-soft); border-left: 2px solid var(--accent); padding-left: .75em;
+}
+
+/* A band that is 21:8 on a desktop column is a letterbox slit on a phone. */
+@media (max-width: 640px) {
+  .figure--band { aspect-ratio: 3 / 2; }
+  .figure--tall { aspect-ratio: 4 / 3; }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+/* The nav carries seven items plus a CTA since "Polski" was added, so it needs
+   to tighten earlier and hand over to the hamburger sooner than before. */
+@media (max-width: 1280px) {
+  .nav__list { gap: var(--sp-4); }
+  .nav__list a { font-size: .9rem; }
+  .header__cta { margin-left: var(--sp-3); padding-inline: 1.1em; }
+}
+@media (max-width: 1140px) {
+  .nav__list { gap: .8rem; }
+  .nav__list a { font-size: .8375rem; }
+  .brand img { width: 44px; height: 44px; }
+  .header__cta { font-size: .9rem; padding-inline: .9em; }
+}
+@media (max-width: 1050px) {
+  .nav, .header__cta, .lang-toggle { display: none; }
+  .burger { display: flex; }
+}
+@media (max-width: 940px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .contact-card { position: static; }
+}
+@media (max-width: 700px) {
+  :root { --header-h: 66px; }
+  body { font-size: 1rem; }
+  .callbar__inner { gap: var(--sp-4); font-size: .8125rem; }
+  .callbar__sep { display: none; }
+  .brand img { width: 42px; height: 42px; }
+  .brand__name { font-size: 1rem; }
+  .hero__actions .btn { width: 100%; }
+  .cta-band__actions { width: 100%; }
+  .cta-band__actions .btn { flex: 1; }
+  .mobile-cta { display: flex; }
+  body { padding-bottom: 72px; }
+  .contact-card { padding: var(--sp-5); }
+
+  /* ---------- Mobile refinements ----------
+     Measured at 320, 360 and 390px, not guessed. */
+
+  /* Standalone contact links (phone, email) need a real tap area. Inline links
+     inside a sentence are exempt under WCAG 2.5.8, so they stay inline. */
+  .contact-card dd a,
+  .footer__list a,
+  .review figcaption a,
+  .doclist a { display: inline-block; min-height: 44px; line-height: 44px; }
+
+  .quiet-link { min-height: 44px; }
+
+  /* Small labels were 11 to 12px. Lifted to at least 12.5px on phones. */
+  .brand__sub { font-size: .75rem; }
+  .badge { font-size: .8125rem; padding: .4em .9em; }
+  .callbar { font-size: .8125rem; }
+
+  /* Long unbroken strings (email addresses, Polish compounds) must not
+     force the page sideways. */
+  a[href^="mailto:"], .contact-card dd { overflow-wrap: anywhere; }
+
+  /* v2: on a phone the hero text runs full width, so the seal would sit
+     underneath it. Drop it and lighten the texture rather than compete. */
+  .hero__seal { display: none; }
+  /* Text crosses the whole image on mobile, including its lighter areas,
+     so the scrim is darkened top to bottom rather than left to right. */
+  .hero__media::after {
+    background:
+      radial-gradient(ellipse 120% 50% at 30% 10%, rgba(13,74,77,.5) 0%, transparent 70%),
+      linear-gradient(178deg, rgba(0,26,11,.93) 0%, rgba(0,34,15,.9) 55%, rgba(0,43,18,.92) 100%);
+  }
+  .hero__engrave { opacity: .18; }
+  .section--engraved::before { opacity: .3; background-size: 180px 180px; }
+  .cta-band::before { opacity: .2; }
+  .framed::before { display: none; }
+  .proof__item + .proof__item::before { display: none; }
+  .proof__item + .proof__item { border-top: 1px solid rgba(255,255,255,.1); padding-top: var(--sp-5); }
+  .pricecard::after { display: none; }
+  .card--engraved::after { opacity: .3; }
+}
+
+/* ---------- Print ---------- */
+@media print {
+  .callbar, .site-header, .mobile-nav, .mobile-cta, .cta-band, .hero__actions, .form-panel { display: none !important; }
+  body { color: #000; background: #fff; font-size: 11pt; padding-bottom: 0; }
+  .hero { background: #fff; color: #000; }
+  .hero__media { display: none; }
+  .hero h1, .hero__lede { color: #000; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555; }
+}
+
+/* ---------- Justified body copy ----------
+   Patrycja asked for this across the site; it is her stated preference.
+   Hyphenation goes on with it, because justified text without hyphens opens
+   ragged word-gaps and vertical "rivers", and that is worst in the narrow
+   single-column mobile layout most of her visitors are on.
+
+   Display copy and interface text stay left-aligned. In a hero, a
+   call-to-action or a form hint, justification reads as a fault rather than a
+   style, and the centred 404 blocks would lose their centring entirely. */
+main p,
+main li {
+  text-align: justify;
+  text-align-last: left;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.hero p,
+.cta-band p,
+.text-center p,
+main .eyebrow,
+main .hint,
+main .optional,
+main .field__error,
+main .form-note,
+main .small,
+main figcaption {
+  text-align: inherit;
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}
+.text-center p { text-align: center; }

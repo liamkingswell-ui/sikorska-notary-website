@@ -1,0 +1,15 @@
+# Keep line endings stable in the repository regardless of who checks it out.
+# Without this, a checkout on Windows and a checkout on Mac produce diffs on
+# every line of every file the moment either person saves, which makes the
+# history useless for seeing what actually changed.
+
+* text=auto eol=lf
+
+# Binary. Never touch these.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.webp  binary
+*.pdf   binary
+*.woff2 binary
+*.ico   binary

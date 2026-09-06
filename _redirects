@@ -1,0 +1,23 @@
+# Netlify redirect rules.
+# If the site is hosted somewhere else, translate these into that host's format.
+# The .htaccess equivalent is in DEPLOY.md.
+
+# --- Canonical host: force www + https ---
+http://sikorskanotary.co.uk/*      https://www.sikorskanotary.co.uk/:splat   301!
+https://sikorskanotary.co.uk/*     https://www.sikorskanotary.co.uk/:splat   301!
+http://www.sikorskanotary.co.uk/*  https://www.sikorskanotary.co.uk/:splat   301!
+
+# --- Renamed page ---
+# The old filename said "legislation". The page is about legalisation.
+# This 301 preserves any existing rankings and inbound links.
+/apostille-and-legislation.html    /apostille-and-legalisation.html          301
+
+# --- Pages the old homepage linked to but never shipped (they 404 today) ---
+/individual-client.html            /notarial-service.html#individual         301
+/corporate-client.html             /for-business.html                        301
+
+# --- Old anchor-based contact link now has a real page ---
+/index.html#contact                /contact.html                             301
+
+# --- 404 ---
+/*                                 /404.html                                 404

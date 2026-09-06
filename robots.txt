@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# AI crawlers are allowed. For a practice competing on being findable rather than
+# on protecting proprietary content, being citable in AI answers is an asset.
+# Remove any of these blocks only if Patrycja decides otherwise.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.sikorskanotary.co.uk/sitemap.xml

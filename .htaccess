@@ -1,0 +1,97 @@
+# Sikorska Notary
+# Apache / LiteSpeed configuration. This is the file Hostinger reads.
+#
+# Upload this into public_html alongside index.html. It must keep the leading
+# dot in its name. Some file managers and some FTP clients hide dotfiles, so if
+# it seems to vanish after upload, turn on "show hidden files" rather than
+# uploading it again.
+#
+# The _redirects file in this folder is the Netlify equivalent and is ignored by
+# Apache. Only one of the two is ever in use. On Hostinger it is this one.
+
+# ---------------------------------------------------------------------------
+# Canonical address: https and www
+# ---------------------------------------------------------------------------
+# Both conditions must be true before redirecting. Checking X-Forwarded-Proto as
+# well as HTTPS matters: if the host ever sits behind a proxy or CDN that
+# terminates SSL, %{HTTPS} reads as off on every request and a rule that trusted
+# it alone would redirect https traffic to https forever, in a loop.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^ https://www.sikorskanotary.co.uk%{REQUEST_URI} [R=301,L]
+
+  RewriteCond %{HTTP_HOST} !^www\.sikorskanotary\.co\.uk$ [NC]
+  RewriteRule ^ https://www.sikorskanotary.co.uk%{REQUEST_URI} [R=301,L]
+
+  # -------------------------------------------------------------------------
+  # Redirects from the old site. Do not remove these.
+  # -------------------------------------------------------------------------
+  # The old filename said "legislation". The page is about legalisation. This
+  # page has existing search rankings, so the 301 preserves them.
+  RewriteRule ^apostille-and-legislation\.html$ /apostille-and-legalisation.html [R=301,L]
+
+  # The old homepage linked to these two pages but they were never built, so
+  # they have been 404ing for visitors and for Google.
+  RewriteRule ^individual-client\.html$ /notarial-service.html#individual [R=301,L]
+  RewriteRule ^corporate-client\.html$  /for-business.html [R=301,L]
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Error page
+# ---------------------------------------------------------------------------
+ErrorDocument 404 /404.html
+
+# ---------------------------------------------------------------------------
+# Caching
+# ---------------------------------------------------------------------------
+# The CSS and JS are requested with a ?v=YYYYMMDD version on the end, and that
+# version changes whenever the file changes, so they are safe to cache hard.
+# HTML is never cached, so a content change is live immediately.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css                "access plus 1 year"
+  ExpiresByType application/javascript  "access plus 1 year"
+  ExpiresByType image/jpeg              "access plus 1 year"
+  ExpiresByType image/png               "access plus 1 year"
+  ExpiresByType image/webp              "access plus 1 year"
+  ExpiresByType image/svg+xml           "access plus 1 year"
+  ExpiresByType font/woff2              "access plus 1 year"
+  ExpiresByType text/html               "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|jpg|jpeg|png|webp|svg|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Sensible defaults. Nothing here restricts how the site works.
+  Header set X-Content-Type-Options "nosniff"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Strict-Transport-Security "max-age=31536000"
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Compression
+# ---------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# ---------------------------------------------------------------------------
+# Housekeeping
+# ---------------------------------------------------------------------------
+Options -Indexes
+AddDefaultCharset UTF-8
+
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType font/woff2 .woff2
+</IfModule>
